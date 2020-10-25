@@ -1,19 +1,28 @@
-#include <avr/io.h>
-#include <avr/pgmspace.h>
-#include <util/delay.h>
-
-#include <stdio.h>
-
 #include "led.h"
 #include "serial.h"
 #include "timer.h"
 
-void main (void) {
-	uart_init();
+int main (void) {
+	/*
+		OCF0A bit is set when TCNTO(Counter) == OCR0A(Max value)
+		Setting OCF0A bit clears the flag
+	*/
+	timer_init();
+	led_init();
+
+	int counter = 0;
 
 	while (1) {
-		/* remove this once you've verified it works */
-		printf_P(PSTR("Hello there\n"));
-		_delay_ms(1000);
+		if (TIFR0 & (1 << OCF0A)) {
+			TIFR0 |= (1 << OCF0A);
+			if (counter == 10) {
+				PORTB ^= (1 << ledGreen);
+				counter = 0;
+			}
+			else {
+				counter++;
+			}		
+		}
 	}
+	return 0;
 }

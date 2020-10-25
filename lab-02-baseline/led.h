@@ -1,7 +1,13 @@
 #ifndef _LED_H_
 #define _LED_H_
 
-void LED_init(void);
+#include <avr/io.h>
 
-#endif // _LED_H_
+#define ledGreen PB1
+#define ledBlue	PB2
+#define ledRed	PB3 
+
+void led_init(void);
+
+#endif
 

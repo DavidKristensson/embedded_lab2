@@ -1,6 +1,6 @@
-#include <avr/io.h>
 #include "led.h"
 
-void LED_init() {
-	// ...
+void led_init() {
+	DDRB |= (1 << ledGreen);
 }
+
