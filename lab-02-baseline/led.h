@@ -6,6 +6,7 @@
 #define ledGreen PB1
 #define ledBlue	PB2
 #define ledRed	PB3 
+#define ledYellow PD6
 
 void led_init(void);
 

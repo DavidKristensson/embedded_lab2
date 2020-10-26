@@ -1,28 +1,22 @@
 #include "led.h"
 #include "serial.h"
 #include "timer.h"
+#include <util/delay.h>
 
 int main (void) {
 	/*
-		OCF0A bit is set when TCNTO(Counter) == OCR0A(Max value)
-		Setting OCF0A bit clears the flag
+		Setting duty cycle/led brightness with OCR0A register
 	*/
 	timer_init();
 	led_init();
 
-	int counter = 0;
-
 	while (1) {
-		if (TIFR0 & (1 << OCF0A)) {
-			TIFR0 |= (1 << OCF0A);
-			if (counter == 10) {
-				PORTB ^= (1 << ledGreen);
-				counter = 0;
-			}
-			else {
-				counter++;
-			}		
-		}
+		OCR0A = 50;
+		_delay_ms(1000);
+		OCR0A = 150;
+		_delay_ms(1000);
+		OCR0A = 250;
+		_delay_ms(1000);
 	}
 	return 0;
 }
