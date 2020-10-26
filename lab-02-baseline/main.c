@@ -5,18 +5,24 @@
 
 int main (void) {
 	/*
-		Setting duty cycle/led brightness with OCR0A register
+		Checking OCF2A flag in TIFR2 register if match has occurred
+		Flag is cleared by setting bit
+
+		Function simple_ramp is run and updated pmwValue is set to OCR0A register 
+		changing the duty cycle/led brightness 1 step at a time
 	*/
 	timer_init();
 	led_init();
 
+	uint8_t direction = 1;
+	uint8_t pwmValue = 1;
+
 	while (1) {
-		OCR0A = 50;
-		_delay_ms(1000);
-		OCR0A = 150;
-		_delay_ms(1000);
-		OCR0A = 250;
-		_delay_ms(1000);
+		if (TIFR2 & (1 << OCF2A)) {
+			simple_ramp(&direction, &pwmValue);
+			OCR0A = pwmValue;
+			TIFR2 |= (1 << OCF2A);
+		}
 	}
 	return 0;
 }
